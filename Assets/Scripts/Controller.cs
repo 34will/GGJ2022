@@ -35,8 +35,9 @@ namespace GGJ2020
         public float TiltAngle = 10.0f;
         public float TiltAnimationDuration = 200.0f;
         public GameObject Particles;
+        public GameObject CameraRoot;
 
-        private void Start()
+        public void Start()
         {
             currentSpeed = Speed;
 
@@ -132,17 +133,17 @@ namespace GGJ2020
             return Mathf.LerpAngle(start, end, interpolationPoint);
         }
 
-        private void Update()
+        public void Update()
         {
             float xVelocity = HorizontalSteer();
             float yVelocity = VerticalSteer();
             rigidbodyComponent.velocity = new Vector3(xVelocity, yVelocity, currentSpeed);
 
-            Vector3 eulerAngles = transform.localRotation.eulerAngles;
+            Vector3 eulerAngles = CameraRoot.transform.localRotation.eulerAngles;
             float zRot = Tilt(eulerAngles.z, currentHorizontalTiltTarget, ref currentHorizontalTiltDuration);
             float xRot = Tilt(eulerAngles.x, currentVerticalTiltTarget, ref currentVerticalTiltDuration);
 
-            transform.localRotation = Quaternion.Euler(xRot, 0, zRot);
+            CameraRoot.transform.localRotation = Quaternion.Euler(xRot, 0, zRot);
 
             Vector3 particlesEulerAngles = Particles.transform.localRotation.eulerAngles;
             float xParticlesRot = Tilt(particlesEulerAngles.x, 5 * currentVerticalTiltTarget, ref currentParticleVerticalTiltDuration);
