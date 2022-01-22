@@ -39,7 +39,7 @@ Shader "Unlit/Stripes2"
             fixed4 frag (v2f i) : SV_Target
             {
                 float pos = i.uv.y * 100;
-                return floor(frac(pos) + 0.5);
+                return floor(frac(pos) + 0.5) * 0.15;
             }
             ENDCG
         }

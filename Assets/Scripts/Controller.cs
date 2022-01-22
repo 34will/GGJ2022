@@ -26,18 +26,18 @@ namespace GGJ2020
         private float currentVerticalTiltTarget = 0.0f;
         private float currentVerticalTiltDuration = 0.0f;
 
-        public float InitialForce = 10.0f;
-        public float SideForce = 10.0f;
+        public float InitialSpeed = 10.0f;
+        public float SideSpeed = 10.0f;
         public float TiltAngle = 10.0f;
         public float TiltAnimationDuration = 200.0f;
 
         private void Start()
         {
             rigidbodyComponent = GetComponent<Rigidbody>();
-            rigidbodyComponent.AddForce(new Vector3(0, 0, InitialForce), ForceMode.Impulse);
+            rigidbodyComponent.velocity = new Vector3(0, 0, InitialSpeed);
         }
 
-        private void HorizontalSteer()
+        private float HorizontalSteer()
         {
             HorizontalDirection newDirection = HorizontalDirection.None;
             bool left = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
@@ -48,37 +48,31 @@ namespace GGJ2020
                 newDirection = horizontalDirection == HorizontalDirection.Left || newDirection == HorizontalDirection.Left ? HorizontalDirection.None : HorizontalDirection.Right;
 
             if (newDirection == horizontalDirection)
-                return;
+                return rigidbodyComponent.velocity.x;
 
+            float result = 0.0f;
             switch (newDirection)
             {
                 case HorizontalDirection.Left:
-                    rigidbodyComponent.AddForce(new Vector3(-SideForce, 0, 0), ForceMode.Impulse);
+                    result = -SideSpeed;
                     currentHorizontalTiltTarget = TiltAngle;
                     break;
                 case HorizontalDirection.Right:
-                    rigidbodyComponent.AddForce(new Vector3(SideForce, 0, 0), ForceMode.Impulse);
+                    result = SideSpeed;
                     currentHorizontalTiltTarget = -TiltAngle;
                     break;
                 case HorizontalDirection.None:
-                    switch (horizontalDirection)
-                    {
-                        case HorizontalDirection.Left:
-                            rigidbodyComponent.AddForce(new Vector3(SideForce, 0, 0), ForceMode.Impulse);
-                            break;
-                        case HorizontalDirection.Right:
-                            rigidbodyComponent.AddForce(new Vector3(-SideForce, 0, 0), ForceMode.Impulse);
-                            break;
-                    }
+                    result = 0.0f;
                     currentHorizontalTiltTarget = 0.0f;
                     break;
             }
 
             currentHorizontalTiltDuration = 0.0f;
             horizontalDirection = newDirection;
+            return result;
         }
 
-        private void VerticalSteer()
+        private float VerticalSteer()
         {
             VerticalDirection newDirection = VerticalDirection.None;
             bool up = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
@@ -89,41 +83,37 @@ namespace GGJ2020
                 newDirection = verticalDirection == VerticalDirection.Up || newDirection == VerticalDirection.Up ? VerticalDirection.None : VerticalDirection.Down;
 
             if (newDirection == verticalDirection)
-                return;
+                return rigidbodyComponent.velocity.y;
 
+            float result = 0.0f;
             switch (newDirection)
             {
                 case VerticalDirection.Up:
-                    rigidbodyComponent.AddForce(new Vector3(0, SideForce, 0), ForceMode.Impulse);
+                    result = SideSpeed;
                     currentVerticalTiltTarget = -TiltAngle;
                     break;
                 case VerticalDirection.Down:
-                    rigidbodyComponent.AddForce(new Vector3(0, -SideForce, 0), ForceMode.Impulse);
+                    result = -SideSpeed;
                     currentVerticalTiltTarget = TiltAngle;
                     break;
                 case VerticalDirection.None:
-                    switch (verticalDirection)
-                    {
-                        case VerticalDirection.Up:
-                            rigidbodyComponent.AddForce(new Vector3(0, -SideForce, 0), ForceMode.Impulse);
-                            break;
-                        case VerticalDirection.Down:
-                            rigidbodyComponent.AddForce(new Vector3(0, SideForce, 0), ForceMode.Impulse);
-                            break;
-                    }
+                    result = 0.0f;
                     currentVerticalTiltTarget = 0.0f;
                     break;
             }
 
             currentVerticalTiltDuration = 0.0f;
             verticalDirection = newDirection;
+            return result;
         }
 
         private float HorizontalTilt()
         {
             float currentTilt = transform.rotation.eulerAngles.z;
-            if (Mathf.Approximately(currentHorizontalTiltTarget, currentTilt))
-                return currentTilt;
+            if (Mathf.Abs(currentHorizontalTiltTarget - currentTilt) <= 1.0f)
+                return currentHorizontalTiltTarget;
+
+            Debug.Log($"Tilting Z {currentHorizontalTiltTarget} {currentTilt}");
 
             currentHorizontalTiltDuration += Time.deltaTime;
             if (currentHorizontalTiltDuration >= TiltAnimationDuration)
@@ -136,8 +126,10 @@ namespace GGJ2020
         private float VerticalTilt()
         {
             float currentTilt = transform.rotation.eulerAngles.x;
-            if (Mathf.Approximately(currentVerticalTiltTarget, currentTilt))
-                return currentTilt;
+            if (Mathf.Abs(currentVerticalTiltTarget - currentTilt) <= 1.0f)
+                return currentVerticalTiltTarget;
+
+            Debug.Log($"Tilting X {currentVerticalTiltTarget} {currentTilt}");
 
             currentVerticalTiltDuration += Time.deltaTime;
             if (currentVerticalTiltDuration >= TiltAnimationDuration)
@@ -149,8 +141,9 @@ namespace GGJ2020
 
         private void Update()
         {
-            HorizontalSteer();
-            VerticalSteer();
+            float xVelocity = HorizontalSteer();
+            float yVelocity = VerticalSteer();
+            rigidbodyComponent.velocity = new Vector3(xVelocity, yVelocity, InitialSpeed);
 
             float zRot = HorizontalTilt();
             float xRot = VerticalTilt();
