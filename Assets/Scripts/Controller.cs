@@ -24,9 +24,11 @@ namespace GGJ2020
         private HorizontalDirection horizontalDirection = HorizontalDirection.None;
         private float currentHorizontalTiltTarget = 0.0f;
         private float currentHorizontalTiltDuration = 0.0f;
+        private float currentParticleHorizontalTiltDuration = 0.0f;
         private VerticalDirection verticalDirection = VerticalDirection.None;
         private float currentVerticalTiltTarget = 0.0f;
         private float currentVerticalTiltDuration = 0.0f;
+        private float currentParticleVerticalTiltDuration = 0.0f;
 
         public float Speed = 10.0f;
         public float SideSpeed = 10.0f;
@@ -73,6 +75,7 @@ namespace GGJ2020
             }
 
             currentHorizontalTiltDuration = 0.0f;
+            currentParticleHorizontalTiltDuration = 0.0f;
             horizontalDirection = newDirection;
             return result;
         }
@@ -108,36 +111,25 @@ namespace GGJ2020
             }
 
             currentVerticalTiltDuration = 0.0f;
+            currentParticleVerticalTiltDuration = 0.0f;
             verticalDirection = newDirection;
             return result;
         }
 
-        private float HorizontalTilt()
+        private float Tilt(float start, float end, ref float duration)
         {
-            float currentTilt = transform.rotation.eulerAngles.z;
-            if (Mathf.Abs(currentHorizontalTiltTarget - currentTilt) <= 1.0f)
-                return currentHorizontalTiltTarget;
+            if (start > 180.0f)
+                start -= 360.0f;
 
-            currentHorizontalTiltDuration += Time.deltaTime;
-            if (currentHorizontalTiltDuration >= TiltAnimationDuration)
-                currentHorizontalTiltDuration = TiltAnimationDuration;
-            float interpolationPoint = currentHorizontalTiltDuration / TiltAnimationDuration;
+            if (Mathf.Abs(end - start) < 0.5f)
+                return end;
+
+            duration += Time.deltaTime;
+            if (duration > TiltAnimationDuration)
+                duration = TiltAnimationDuration;
+            float interpolationPoint = duration / TiltAnimationDuration;
             
-            return Mathf.LerpAngle(transform.rotation.eulerAngles.z, currentHorizontalTiltTarget, interpolationPoint);
-        }
-
-        private float VerticalTilt()
-        {
-            float currentTilt = transform.rotation.eulerAngles.x;
-            if (Mathf.Abs(currentVerticalTiltTarget - currentTilt) <= 1.0f)
-                return currentVerticalTiltTarget;
-
-            currentVerticalTiltDuration += Time.deltaTime;
-            if (currentVerticalTiltDuration >= TiltAnimationDuration)
-                currentVerticalTiltDuration = TiltAnimationDuration;
-            float interpolationPoint = currentVerticalTiltDuration / TiltAnimationDuration;
-            
-            return Mathf.LerpAngle(transform.rotation.eulerAngles.x, currentVerticalTiltTarget, interpolationPoint);
+            return Mathf.LerpAngle(start, end, interpolationPoint);
         }
 
         private void Update()
@@ -146,9 +138,16 @@ namespace GGJ2020
             float yVelocity = VerticalSteer();
             rigidbodyComponent.velocity = new Vector3(xVelocity, yVelocity, currentSpeed);
 
-            float zRot = HorizontalTilt();
-            float xRot = VerticalTilt();
-            transform.rotation = Quaternion.Euler(xRot, 0, zRot);
+            Vector3 eulerAngles = transform.localRotation.eulerAngles;
+            float zRot = Tilt(eulerAngles.z, currentHorizontalTiltTarget, ref currentHorizontalTiltDuration);
+            float xRot = Tilt(eulerAngles.x, currentVerticalTiltTarget, ref currentVerticalTiltDuration);
+
+            transform.localRotation = Quaternion.Euler(xRot, 0, zRot);
+
+            Vector3 particlesEulerAngles = Particles.transform.localRotation.eulerAngles;
+            float xParticlesRot = Tilt(particlesEulerAngles.x, 5 * currentVerticalTiltTarget, ref currentParticleVerticalTiltDuration);
+            float yParticlesRot = Tilt(particlesEulerAngles.y, -5 * currentHorizontalTiltTarget, ref currentParticleHorizontalTiltDuration);
+            Particles.transform.localRotation = Quaternion.Euler(xParticlesRot, yParticlesRot, particlesEulerAngles.z);
 
             if (Input.GetKeyDown(KeyCode.Space))
                 currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
