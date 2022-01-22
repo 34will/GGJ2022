@@ -5778,6 +5778,7 @@ MonoBehaviour:
   SideSpeed: 10
   TiltAngle: 5
   TiltAnimationDuration: 20
+  Particles: {fileID: 86236145}
 --- !u!1 &1624111826
 GameObject:
   m_ObjectHideFlags: 0
