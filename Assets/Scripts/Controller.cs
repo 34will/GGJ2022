@@ -18,6 +18,8 @@ namespace GGJ2020
 
     public class Controller : MonoBehaviour
     {
+        private float currentSpeed = 0.0f;
+
         private Rigidbody rigidbodyComponent;
         private HorizontalDirection horizontalDirection = HorizontalDirection.None;
         private float currentHorizontalTiltTarget = 0.0f;
@@ -26,15 +28,18 @@ namespace GGJ2020
         private float currentVerticalTiltTarget = 0.0f;
         private float currentVerticalTiltDuration = 0.0f;
 
-        public float InitialSpeed = 10.0f;
+        public float Speed = 10.0f;
         public float SideSpeed = 10.0f;
         public float TiltAngle = 10.0f;
         public float TiltAnimationDuration = 200.0f;
+        public GameObject Particles;
 
         private void Start()
         {
+            currentSpeed = Speed;
+
             rigidbodyComponent = GetComponent<Rigidbody>();
-            rigidbodyComponent.velocity = new Vector3(0, 0, InitialSpeed);
+            rigidbodyComponent.velocity = new Vector3(0, 0, currentSpeed);
         }
 
         private float HorizontalSteer()
@@ -113,8 +118,6 @@ namespace GGJ2020
             if (Mathf.Abs(currentHorizontalTiltTarget - currentTilt) <= 1.0f)
                 return currentHorizontalTiltTarget;
 
-            Debug.Log($"Tilting Z {currentHorizontalTiltTarget} {currentTilt}");
-
             currentHorizontalTiltDuration += Time.deltaTime;
             if (currentHorizontalTiltDuration >= TiltAnimationDuration)
                 currentHorizontalTiltDuration = TiltAnimationDuration;
@@ -129,8 +132,6 @@ namespace GGJ2020
             if (Mathf.Abs(currentVerticalTiltTarget - currentTilt) <= 1.0f)
                 return currentVerticalTiltTarget;
 
-            Debug.Log($"Tilting X {currentVerticalTiltTarget} {currentTilt}");
-
             currentVerticalTiltDuration += Time.deltaTime;
             if (currentVerticalTiltDuration >= TiltAnimationDuration)
                 currentVerticalTiltDuration = TiltAnimationDuration;
@@ -143,11 +144,14 @@ namespace GGJ2020
         {
             float xVelocity = HorizontalSteer();
             float yVelocity = VerticalSteer();
-            rigidbodyComponent.velocity = new Vector3(xVelocity, yVelocity, InitialSpeed);
+            rigidbodyComponent.velocity = new Vector3(xVelocity, yVelocity, currentSpeed);
 
             float zRot = HorizontalTilt();
             float xRot = VerticalTilt();
             transform.rotation = Quaternion.Euler(xRot, 0, zRot);
+
+            if (Input.GetKeyDown(KeyCode.Space))
+                currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
         }
     }
 }
