@@ -37,7 +37,7 @@ namespace GGJ2020
             return (new Vector3(x, y, z), Quaternion.Euler(xRot, yRot, zRot), new Vector3(scale, scale, scale));
         }
 
-        private void Start()
+        public void Start()
         {
             if (ObstaclePrefabs == null || ObstaclePrefabs.Count <= 0 || NumberOfObstacles <= 0 || Radius <= 0.0f)
                 return;
@@ -49,12 +49,15 @@ namespace GGJ2020
                 int index = Random.Range(0, ObstaclePrefabs.Count);
                 (Vector3 pos, Quaternion rot, Vector3 scale) = GenerateCubeTransform(20.0f);
                 GameObject instance = Instantiate(ObstaclePrefabs[index], pos, rot, transform);
+                Renderer objectRen;
+                objectRen = instance.GetComponent<Renderer>();
+                objectRen.material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
                 instance.transform.localScale = scale;
                 instances.Add(instance);
             }
         }
 
-        private void Update()
+        public void Update()
         {
             float playerZ = Player.transform.position.z - 1;
             foreach (GameObject instance in instances)
