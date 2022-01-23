@@ -31,6 +31,7 @@ namespace GGJ2020
         public GameObject CameraRoot;
         public Camera Camera;
         public ForceField ForceField;
+        public GameManager GameManager;
 
         public void Start()
         {
@@ -150,8 +151,15 @@ namespace GGJ2020
             Particles.transform.localRotation = Quaternion.Euler(xParticlesRot, yParticlesRot, particlesEulerAngles.z);
 
             if (Input.GetKeyDown(KeyCode.Space))
-                ForceField.Enable();
-                // currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
+                EnableForceField();
+        }
+
+        public void EnableForceField()
+        {
+            if (!GameManager.UseForceField())
+                return;
+
+            ForceField.Enable();
         }
 
         public void SetSpeed(float speed)

@@ -1,82 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 namespace GGJ2020
 {
-
-
-
     public class UI : MonoBehaviour
     {
         public TextMeshProUGUI scoreText;
         public TextMeshProUGUI speedText;
-
         public TextMeshProUGUI gatesText;
         public TextMeshProUGUI livesText;
         public TextMeshProUGUI rotText;
+        public TextMeshProUGUI particlesHitText;
+        public TextMeshProUGUI forceFieldUsagesText;
 
-        private int score;
-        private float speed;
-        private float gates;
-        private float rot;
-        private float lives;
-
-        // Start is called before the first frame update
-        void Start()
+        public void UpdateLives(int lives, int maxLives)
         {
-            speed = 100;
-            score = 0;
-            lives = 0;
-            gates = 0;
-            rot = 0;
-            UpdateScore(0);
-            UpdateSpeed(0);
-            UpdateGates(0);
-            UpdateLives(0);
-            UpdateRotation(0);
+            livesText.text = $"Lives: {lives}/{maxLives}";
         }
 
-        // Update is called once per frame
-        void Update()
+        public void UpdateObstaclesHit(int hits)
         {
-            UpdateScore(1);
+            particlesHitText.text = $"Particles Hit: {hits}";
         }
 
-        public void UpdateScore(int scoreToAdd)
+        public void UpdateForceFieldUsages(int usages)
         {
-            score += scoreToAdd;
-            scoreText.text = "Distance: " + score;
-
+            forceFieldUsagesText.text = $"Particle Mode Usages: {usages}";
         }
 
-        public void UpdateSpeed(float scoreToAdd)
+        public void UpdateDistance(float score)
         {
-            speed += scoreToAdd;
-            speedText.text = "Speed: " + speed;
-
+            string scoreFormatted = score.ToString("0");
+            scoreText.text = $"Distance: {scoreFormatted}m";
         }
 
-        public void UpdateLives(float scoreToAdd)
+        public void UpdateSpeed(float speed)
         {
-            lives += scoreToAdd;
-            livesText.text = "Lives: " + lives;
-
+            string speedFormatted = speed.ToString("0");
+            speedText.text = $"Speed: {speedFormatted}m/s";
         }
 
-        public void UpdateRotation(float scoreToAdd)
+        public void UpdateRotation(float rotation)
         {
-            rot += scoreToAdd;
-            rotText.text = "Rotation Speed: " + rot;
-
+            string rotationFormatted = rotation.ToString("0");
+            rotText.text = $"Rotation Speed: {rotationFormatted}m/s";
         }
 
-        public void UpdateGates(float scoreToAdd)
+        public void UpdateGates(int gates)
         {
-            gates += scoreToAdd;
-            gatesText.text = "Gates Passed: " + gates;
-
+            gatesText.text = $"Gates Passed: {gates}";
         }
     }
 }

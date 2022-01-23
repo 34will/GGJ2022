@@ -6,7 +6,8 @@ namespace GGJ2020
     public class GameManager : MonoBehaviour
     {
         private List<int> boons = null;
-        private int lives;
+        private float startZ = 0.0f;
+        private int gates = 0;
 
         public UI Ui;
         public Controller Player;
@@ -17,13 +18,18 @@ namespace GGJ2020
         public float MaxSpeed;
         public float RotationSpeedIncrease;
         public float MaxRotationSpeed;
+        public int ForceFieldUses = 0;
+        public int StartForceFieldUses = 3;
+        public int ObstaclesHit = 0;
+        public int Lives = 0;
         public int StartLives = 3;
 
         public void Start()
         {
             Player.Speed = InitialSpeed;
 
-            lives = StartLives;
+            Lives = StartLives;
+            ForceFieldUses = StartForceFieldUses;
 
             int speedChanges = (int)(MaxSpeed / SpeedIncrease);
             int rotationChanges = (int)(MaxRotationSpeed / RotationSpeedIncrease);
@@ -32,6 +38,26 @@ namespace GGJ2020
                 boons.Add(0);
             for (int i = 0; i < rotationChanges; i++)
                 boons.Add(1);
+
+            Ui.UpdateLives(Lives, StartLives);
+            Ui.UpdateObstaclesHit(ObstaclesHit);
+            Ui.UpdateForceFieldUsages(ForceFieldUses);
+
+            startZ = Player.transform.position.z;
+            UpdateDistance();
+            Ui.UpdateGates(gates);
+            Ui.UpdateSpeed(Player.Speed);
+            Ui.UpdateRotation(ObstaclesRotater.RotateSpeed);
+        }
+
+        public void Update()
+        {
+            UpdateDistance();
+        }
+
+        private void UpdateDistance()
+        {
+            Ui.UpdateDistance(Player.transform.position.z - startZ);
         }
 
         public void GatePassed()
@@ -50,7 +76,6 @@ namespace GGJ2020
                         newSpeed = MaxSpeed;
                     Player.SetSpeed(newSpeed);
                     Ui.UpdateSpeed(Player.Speed);
-                    Ui.UpdateGates(1);
 
                     break;
                 case 1:
@@ -60,9 +85,43 @@ namespace GGJ2020
                     TubesRotater.RotateSpeed = -newRotateSpeed;
                     ObstaclesRotater.RotateSpeed = newRotateSpeed;
                     Ui.UpdateRotation(ObstaclesRotater.RotateSpeed);
-                    Ui.UpdateGates(1);
                     break;
             }
+
+            gates++;
+            Ui.UpdateGates(gates);
+            GiveForceField(1);
+        }
+
+        public void LifeLost()
+        {
+            Lives--;
+            Ui.UpdateLives(Lives, StartLives);
+        }
+
+        public void ObstacleHit()
+        {
+            ObstaclesHit++;
+            Ui.UpdateObstaclesHit(ObstaclesHit);
+        }
+
+        public bool UseForceField()
+        {
+            if (ForceFieldUses <= 0)
+            {
+                ForceFieldUses = 0;
+                return false;
+            }
+
+            ForceFieldUses--;
+            Ui.UpdateForceFieldUsages(ForceFieldUses);
+            return true;
+        }
+
+        public void GiveForceField(int amount = 1)
+        {
+            ForceFieldUses += amount;
+            Ui.UpdateForceFieldUsages(ForceFieldUses);
         }
     }
 }

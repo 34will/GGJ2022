@@ -47,6 +47,9 @@ namespace GGJ2020
 
         public void Enable()
         {
+            if (state != State.None)
+                return;
+
             timer = 0.0f;
             marker = SolidDuration;
             flicker.enabled = false;

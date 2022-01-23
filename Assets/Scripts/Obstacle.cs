@@ -9,6 +9,7 @@ namespace GGJ2020
 
         public ParticleSystem ParticleSystem;
         public MeshRenderer MeshRenderer;
+        public GameManager GameManager;
 
         public void Start()
         {
@@ -17,7 +18,11 @@ namespace GGJ2020
 
         public void OnCollisionEnter(Collision collision)
         {
+            if (collision.transform.tag != "Player")
+                return;
+
             Collide();
+            GameManager.LifeLost();
         }
 
         public void Collide()
@@ -28,6 +33,7 @@ namespace GGJ2020
             MeshRenderer.enabled = false;
             Collider.enabled = false;
             ParticleSystem.Play();
+            GameManager.ObstacleHit();
         }
 
         public void Reset()

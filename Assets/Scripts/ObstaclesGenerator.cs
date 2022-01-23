@@ -18,6 +18,7 @@ namespace GGJ2020
         public float Radius;
         public int NumberOfObstacles = 100;
         public Controller Player;
+        public GameManager GameManager;
 
         private (Vector3 position, Quaternion rotation, Vector3 scale) GenerateCubeTransform(float minZ)
         {
@@ -58,6 +59,7 @@ namespace GGJ2020
                 Obstacle obstacleInstance = instance.GetComponent<Obstacle>();
                 if (obstacleInstance == null)
                     throw new Exception("The obstacle prefab needs an Obstacle Component.");
+                obstacleInstance.GameManager = GameManager;
                 instances.Add(obstacleInstance);
             }
 
