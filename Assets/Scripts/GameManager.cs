@@ -7,6 +7,7 @@ namespace GGJ2020
     {
         private List<int> boons = null;
 
+        public UI Ui;
         public Controller Player;
         public Rotater TubesRotater;
         public Rotater ObstaclesRotater;
@@ -44,6 +45,9 @@ namespace GGJ2020
                     if (newSpeed > MaxSpeed)
                         newSpeed = MaxSpeed;
                     Player.SetSpeed(newSpeed);
+                    Ui.UpdateSpeed(Player.Speed);
+                    Ui.UpdateGates(1);
+
                     break;
                 case 1:
                     float newRotateSpeed = ObstaclesRotater.RotateSpeed + RotationSpeedIncrease;
@@ -51,6 +55,8 @@ namespace GGJ2020
                         newRotateSpeed = MaxRotationSpeed;
                     TubesRotater.RotateSpeed = -newRotateSpeed;
                     ObstaclesRotater.RotateSpeed = newRotateSpeed;
+                    Ui.UpdateRotation(ObstaclesRotater.RotateSpeed);
+                    Ui.UpdateGates(1);
                     break;
             }
         }
