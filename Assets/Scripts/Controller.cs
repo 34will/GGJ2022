@@ -2,18 +2,11 @@ using UnityEngine;
 
 namespace GGJ2020
 {
-    public enum HorizontalDirection
+    public enum Direction
     {
         None = 0,
-        Left = 1,
-        Right = 2
-    }
-
-    public enum VerticalDirection
-    {
-        None = 0,
-        Up = 1,
-        Down = 2
+        Positive = 1,
+        Negative = 2
     }
 
     public class Controller : MonoBehaviour
@@ -21,11 +14,11 @@ namespace GGJ2020
         private float currentSpeed = 0.0f;
 
         private Rigidbody rigidbodyComponent;
-        private HorizontalDirection horizontalDirection = HorizontalDirection.None;
+        private Direction horizontalDirection = Direction.None;
         private float currentHorizontalTiltTarget = 0.0f;
         private float currentHorizontalTiltDuration = 0.0f;
         private float currentParticleHorizontalTiltDuration = 0.0f;
-        private VerticalDirection verticalDirection = VerticalDirection.None;
+        private Direction verticalDirection = Direction.None;
         private float currentVerticalTiltTarget = 0.0f;
         private float currentVerticalTiltDuration = 0.0f;
         private float currentParticleVerticalTiltDuration = 0.0f;
@@ -45,76 +38,80 @@ namespace GGJ2020
             rigidbodyComponent.velocity = new Vector3(0, 0, currentSpeed);
         }
 
-        private float HorizontalSteer()
+        private float Steer(
+            KeyCode positive1,
+            KeyCode positive2,
+            KeyCode negative1,
+            KeyCode negative2,
+            float value,
+            ref Direction direction,
+            ref float tiltTarget,
+            ref float tiltDuration,
+            ref float particleTiltDuration
+        )
         {
-            HorizontalDirection newDirection = HorizontalDirection.None;
-            bool left = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-            bool right = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
-            if (left && !right)
-                newDirection = horizontalDirection == HorizontalDirection.Right ? HorizontalDirection.None : HorizontalDirection.Left;
-            else if (!left && right)
-                newDirection = horizontalDirection == HorizontalDirection.Left || newDirection == HorizontalDirection.Left ? HorizontalDirection.None : HorizontalDirection.Right;
+            Direction newDirection = Direction.None;
+            bool positive = Input.GetKey(positive1) || Input.GetKey(positive2);
+            bool negative = Input.GetKey(negative1) || Input.GetKey(negative2);
+            if (positive && !negative)
+                newDirection = direction == Direction.Negative ? Direction.None : Direction.Positive;
+            else if (!positive && negative)
+                newDirection = direction == Direction.Positive || newDirection == Direction.Positive ? Direction.None : Direction.Negative;
 
-            if (newDirection == horizontalDirection)
-                return rigidbodyComponent.velocity.x;
+            if (newDirection == direction)
+                return value;
 
             float result = 0.0f;
             switch (newDirection)
             {
-                case HorizontalDirection.Left:
-                    result = -SideSpeed;
-                    currentHorizontalTiltTarget = TiltAngle;
-                    break;
-                case HorizontalDirection.Right:
+                case Direction.Positive:
                     result = SideSpeed;
-                    currentHorizontalTiltTarget = -TiltAngle;
+                    tiltTarget = -TiltAngle;
                     break;
-                case HorizontalDirection.None:
+                case Direction.Negative:
+                    result = -SideSpeed;
+                    tiltTarget = TiltAngle;
+                    break;
+                case Direction.None:
                     result = 0.0f;
-                    currentHorizontalTiltTarget = 0.0f;
+                    tiltTarget = 0.0f;
                     break;
             }
 
-            currentHorizontalTiltDuration = 0.0f;
-            currentParticleHorizontalTiltDuration = 0.0f;
-            horizontalDirection = newDirection;
+            tiltDuration = 0.0f;
+            particleTiltDuration = 0.0f;
+            direction = newDirection;
             return result;
+        }
+
+        private float HorizontalSteer()
+        {
+            return Steer(
+                KeyCode.RightArrow,
+                KeyCode.D,
+                KeyCode.LeftArrow,
+                KeyCode.A,
+                rigidbodyComponent.velocity.x,
+                ref horizontalDirection,
+                ref currentHorizontalTiltTarget,
+                ref currentHorizontalTiltDuration,
+                ref currentParticleHorizontalTiltDuration
+            );
         }
 
         private float VerticalSteer()
         {
-            VerticalDirection newDirection = VerticalDirection.None;
-            bool up = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-            bool down = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
-            if (up && !down)
-                newDirection = verticalDirection == VerticalDirection.Down ? VerticalDirection.None : VerticalDirection.Up;
-            else if (!up && down)
-                newDirection = verticalDirection == VerticalDirection.Up || newDirection == VerticalDirection.Up ? VerticalDirection.None : VerticalDirection.Down;
-
-            if (newDirection == verticalDirection)
-                return rigidbodyComponent.velocity.y;
-
-            float result = 0.0f;
-            switch (newDirection)
-            {
-                case VerticalDirection.Up:
-                    result = SideSpeed;
-                    currentVerticalTiltTarget = -TiltAngle;
-                    break;
-                case VerticalDirection.Down:
-                    result = -SideSpeed;
-                    currentVerticalTiltTarget = TiltAngle;
-                    break;
-                case VerticalDirection.None:
-                    result = 0.0f;
-                    currentVerticalTiltTarget = 0.0f;
-                    break;
-            }
-
-            currentVerticalTiltDuration = 0.0f;
-            currentParticleVerticalTiltDuration = 0.0f;
-            verticalDirection = newDirection;
-            return result;
+            return Steer(
+                KeyCode.UpArrow,
+                KeyCode.W,
+                KeyCode.DownArrow,
+                KeyCode.S,
+                rigidbodyComponent.velocity.y,
+                ref verticalDirection,
+                ref currentVerticalTiltTarget,
+                ref currentVerticalTiltDuration,
+                ref currentParticleVerticalTiltDuration
+            );
         }
 
         private float Tilt(float start, float end, ref float duration)
@@ -122,7 +119,7 @@ namespace GGJ2020
             if (start > 180.0f)
                 start -= 360.0f;
 
-            if (Mathf.Abs(end - start) < 0.5f)
+            if (Mathf.Abs(end - start) < 0.1f)
                 return end;
 
             duration += Time.deltaTime;
