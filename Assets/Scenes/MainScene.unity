@@ -5174,7 +5174,7 @@ MonoBehaviour:
   MaxScale: 2
   MaxZ: 100
   Radius: 10
-  NumberOfObstacles: 200
+  NumberOfObstacles: 100
   Player: {fileID: 1209367647}
 --- !u!114 &666235123
 MonoBehaviour:
@@ -5362,6 +5362,7 @@ GameObject:
   - component: {fileID: 1209367648}
   - component: {fileID: 1209367653}
   - component: {fileID: 1209367652}
+  - component: {fileID: 1209367654}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5481,6 +5482,19 @@ MonoBehaviour:
   TiltAnimationDuration: 20
   Particles: {fileID: 86236145}
   CameraRoot: {fileID: 635664678}
+--- !u!114 &1209367654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209367647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9f1bd3794298748b6a746e903e6e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RotateSpeed: 0
 --- !u!1 &1777716932
 GameObject:
   m_ObjectHideFlags: 0
