@@ -38,7 +38,7 @@ namespace GGJ2020
         public void Update()
         {
             GameObject lastTube = TubeObjects[lastTubeIndex];
-            if (Player.transform.position.z - 1 < lastTube.transform.position.z + tubeLength)
+            if (Player.transform.position.z - 15 < lastTube.transform.position.z + tubeLength)
                 return;
 
             GameObject finalTube = TubeObjects[previousLastTubeIndex];

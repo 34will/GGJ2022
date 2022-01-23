@@ -59,7 +59,7 @@ namespace GGJ2020
 
         public void Update()
         {
-            float playerZ = Player.transform.position.z - 1;
+            float playerZ = Player.transform.position.z - 15;
             foreach (GameObject instance in instances)
             {
                 if (instance.transform.position.z > playerZ)
