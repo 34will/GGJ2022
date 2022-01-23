@@ -5354,6 +5354,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1777716933}
   speedText: {fileID: 1249448114}
+  gatesText: {fileID: 1371338607}
+  livesText: {fileID: 1213882942}
+  rotText: {fileID: 1309655541}
 --- !u!1 &1209367647
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,7 +5770,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 10, y: 30}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 243.57, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &1309655539
 GameObject:
@@ -5804,7 +5807,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 10, y: 53}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 243.5698, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1309655541
 MonoBehaviour:
@@ -5937,7 +5940,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1392, y: 923.5}
+  m_AnchoredPosition: {x: 1301, y: 923.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1371338607
@@ -6169,7 +6172,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 10, y: 10}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 243.57, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &2055868276
 GameObject:
