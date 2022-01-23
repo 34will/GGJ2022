@@ -29,6 +29,8 @@ namespace GGJ2020
         public float TiltAnimationDuration = 200.0f;
         public GameObject Particles;
         public GameObject CameraRoot;
+        public Camera Camera;
+        public ForceField ForceField;
 
         public void Start()
         {
@@ -148,7 +150,8 @@ namespace GGJ2020
             Particles.transform.localRotation = Quaternion.Euler(xParticlesRot, yParticlesRot, particlesEulerAngles.z);
 
             if (Input.GetKeyDown(KeyCode.Space))
-                currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
+                ForceField.Enable();
+                // currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
         }
 
         public void SetSpeed(float speed)
@@ -158,5 +161,10 @@ namespace GGJ2020
             if (currentSpeed > 0.0f)
                 currentSpeed = Speed;
         }
+
+        // public void ActivateParticleMode(bool fromCollision)
+        // {
+        //     ForceField.SetActive(true);
+        // }
     }
 }

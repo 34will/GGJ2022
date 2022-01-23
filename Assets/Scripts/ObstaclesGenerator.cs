@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Exception = System.Exception;
 
 namespace GGJ2020
 {
     public class ObstaclesGenerator : MonoBehaviour
     {
-        private List<GameObject> instances;
+        private List<Obstacle> instances;
         private float maxDistance;
+        private float cameraOffset;
 
         public UI Ui;
         public List<GameObject> ObstaclePrefabs;
@@ -15,7 +17,7 @@ namespace GGJ2020
         public float MaxZ;
         public float Radius;
         public int NumberOfObstacles = 100;
-        public GameObject Player;
+        public Controller Player;
 
         private (Vector3 position, Quaternion rotation, Vector3 scale) GenerateCubeTransform(float minZ)
         {
@@ -44,7 +46,7 @@ namespace GGJ2020
                 return;
 
             maxDistance = Radius * Radius;
-            instances = new List<GameObject>(NumberOfObstacles);
+            instances = new List<Obstacle>(NumberOfObstacles);
             for (int i = 0; i < NumberOfObstacles; i++)
             {
                 int index = Random.Range(0, ObstaclePrefabs.Count);
@@ -53,18 +55,24 @@ namespace GGJ2020
                 Renderer objectRen = instance.GetComponent<Renderer>();
                 objectRen.material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
                 instance.transform.localScale = scale;
-                instances.Add(instance);
+                Obstacle obstacleInstance = instance.GetComponent<Obstacle>();
+                if (obstacleInstance == null)
+                    throw new Exception("The obstacle prefab needs an Obstacle Component.");
+                instances.Add(obstacleInstance);
             }
+
+            cameraOffset = Mathf.Abs(Player.Camera.transform.localPosition.z) + 1;
         }
 
         public void Update()
         {
-            float playerZ = Player.transform.position.z - 15;
-            foreach (GameObject instance in instances)
+            float playerZ = Player.transform.position.z - cameraOffset;
+            foreach (Obstacle instance in instances)
             {
                 if (instance.transform.position.z > playerZ)
                     continue;
 
+                instance.Reset();
                 (Vector3 pos, Quaternion rot, Vector3 scale) = GenerateCubeTransform(MaxZ);
                 instance.transform.position = pos;
                 instance.transform.rotation = rot;

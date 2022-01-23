@@ -8,9 +8,10 @@ namespace GGJ2020
         private float tubeLength;
         private int previousLastTubeIndex = 0;
         private int lastTubeIndex = 0;
+        private float cameraOffset;
 
         public GameManager GameManager;
-        public Transform Player;
+        public Controller Player;
         public GameObject TubePrefab;
         public List<GameObject> TubeObjects;
         public float VisibleLength;
@@ -33,12 +34,14 @@ namespace GGJ2020
                 currentLength += tubeLength;
             }
             previousLastTubeIndex = TubeObjects.Count - 1;
+
+            cameraOffset = Mathf.Abs(Player.Camera.transform.localPosition.z) + 1;
         }
 
         public void Update()
         {
             GameObject lastTube = TubeObjects[lastTubeIndex];
-            if (Player.transform.position.z - 15 < lastTube.transform.position.z + tubeLength)
+            if (Player.transform.position.z - cameraOffset < lastTube.transform.position.z + tubeLength)
                 return;
 
             GameObject finalTube = TubeObjects[previousLastTubeIndex];

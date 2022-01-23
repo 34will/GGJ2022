@@ -6,6 +6,7 @@ namespace GGJ2020
     public class GameManager : MonoBehaviour
     {
         private List<int> boons = null;
+        private int lives;
 
         public UI Ui;
         public Controller Player;
@@ -16,10 +17,13 @@ namespace GGJ2020
         public float MaxSpeed;
         public float RotationSpeedIncrease;
         public float MaxRotationSpeed;
+        public int StartLives = 3;
 
         public void Start()
         {
             Player.Speed = InitialSpeed;
+
+            lives = StartLives;
 
             int speedChanges = (int)(MaxSpeed / SpeedIncrease);
             int rotationChanges = (int)(MaxRotationSpeed / RotationSpeedIncrease);
