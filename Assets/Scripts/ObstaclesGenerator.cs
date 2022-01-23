@@ -5,11 +5,10 @@ namespace GGJ2020
 {
     public class ObstaclesGenerator : MonoBehaviour
     {
-
-        public UI Ui;
         private List<GameObject> instances;
         private float maxDistance;
 
+        public UI Ui;
         public List<GameObject> ObstaclePrefabs;
         public float MinScale = 1.0f;
         public float MaxScale = 1.0f;

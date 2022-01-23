@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aab9357f59c77b4ba0e56d2e03a65db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameManager: {fileID: 881484914}
   Player: {fileID: 1209367651}
   TubePrefab: {fileID: 106544562695910651, guid: bbb13e432c940ee45ad318bf9cd45d24, type: 3}
   TubeObjects: []
@@ -178,12 +179,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19484182}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab9f1bd3794298748b6a746e903e6e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotateSpeed: -5
+  RotateSpeed: 0
 --- !u!1 &86236145
 GameObject:
   m_ObjectHideFlags: 0
@@ -5182,12 +5183,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 666235120}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab9f1bd3794298748b6a746e903e6e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotateSpeed: 5
+  RotateSpeed: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -5326,6 +5327,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d729868aca96c740aaae1d27d662dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 1209367653}
+  TubesRotater: {fileID: 19484185}
+  ObstaclesRotater: {fileID: 666235123}
+  InitialSpeed: 20
+  SpeedIncrease: 10
+  MaxSpeed: 60
+  RotationSpeedIncrease: 20
+  MaxRotationSpeed: 100
 --- !u!114 &881484915
 MonoBehaviour:
   m_ObjectHideFlags: 0

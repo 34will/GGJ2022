@@ -9,6 +9,7 @@ namespace GGJ2020
         private int previousLastTubeIndex = 0;
         private int lastTubeIndex = 0;
 
+        public GameManager GameManager;
         public Transform Player;
         public GameObject TubePrefab;
         public List<GameObject> TubeObjects;
@@ -47,6 +48,8 @@ namespace GGJ2020
             lastTubeIndex++;
             if (lastTubeIndex >= TubeObjects.Count)
                 lastTubeIndex = 0;
+
+            GameManager.GatePassed();
         }
     }
 }

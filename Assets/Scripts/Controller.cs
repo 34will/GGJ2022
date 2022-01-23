@@ -153,5 +153,13 @@ namespace GGJ2020
             if (Input.GetKeyDown(KeyCode.Space))
                 currentSpeed = currentSpeed == 0.0f ? Speed : 0.0f;
         }
+
+        public void SetSpeed(float speed)
+        {
+            Speed = speed;
+
+            if (currentSpeed > 0.0f)
+                currentSpeed = Speed;
+        }
     }
 }
