@@ -18,19 +18,17 @@ namespace GGJ2020
         private float timer = 0.0f;
         private float marker = 0.0f;
         private Flicker flicker;
-        private Collider colliderComponent;
 
-        public Collider Model;
         public float SolidDuration = 3.0f;
         public float FlashDuration = 2.0f;
         public float HyperFlashDuration = 2.0f;
         public float FlashSpeed = 0.1f;
         public float HyperFlashSpeed = 0.05f;
+        public Controller Controller;
 
         public void Start()
         {
             flicker = GetComponent<Flicker>();
-            colliderComponent = GetComponent<Collider>();
         }
 
         public void OnTriggerEnter(Collider collider)
@@ -55,7 +53,7 @@ namespace GGJ2020
             flicker.enabled = false;
             flicker.MeshRenderer.enabled = true;
             state = State.Solid;
-            Model.enabled = false;
+            Controller.IgnoringCollisions = true;
         }
 
         public void Disable()
@@ -63,7 +61,7 @@ namespace GGJ2020
             flicker.enabled = false;
             flicker.MeshRenderer.enabled = false;
             state = State.None;
-            Model.enabled = true;
+            Controller.IgnoringCollisions = false;
         }
 
         public void Update()

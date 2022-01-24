@@ -153,7 +153,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &19484184
 MonoBehaviour:
@@ -295,12 +295,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c22d3db84e42847a0bb4f3c33bba6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Model: {fileID: 837536944}
   SolidDuration: 2
   FlashDuration: 1
   HyperFlashDuration: 1
   FlashSpeed: 0.1
   HyperFlashSpeed: 0.05
+  Controller: {fileID: 1209367653}
 --- !u!114 &71514926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5400,7 +5400,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &666235122
 MonoBehaviour:
@@ -5530,7 +5530,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &837536942
 GameObject:
@@ -5677,7 +5677,7 @@ Transform:
   m_Children:
   - {fileID: 589496932}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &881484914
 MonoBehaviour:
@@ -5705,6 +5705,7 @@ MonoBehaviour:
   ObstaclesHit: 0
   Lives: 0
   StartLives: 3
+  Boons: 
 --- !u!114 &881484915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5987,7 +5988,7 @@ Transform:
   - {fileID: 837536943}
   - {fileID: 635664679}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1209367652
 Rigidbody:
@@ -6017,6 +6018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73711a8dce97d84dba1d3ecd15494e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IgnoringCollisions: 0
   Speed: 20
   SideSpeed: 10
   TiltAngle: 5
@@ -6026,6 +6028,7 @@ MonoBehaviour:
   Camera: {fileID: 3030448193966720988}
   ForceField: {fileID: 71514925}
   GameManager: {fileID: 881484914}
+  Collider: {fileID: 837536944}
 --- !u!1 &1213882940
 GameObject:
   m_ObjectHideFlags: 0

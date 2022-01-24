@@ -23,6 +23,7 @@ namespace GGJ2020
         private float currentVerticalTiltDuration = 0.0f;
         private float currentParticleVerticalTiltDuration = 0.0f;
 
+        public bool IgnoringCollisions = false;
         public float Speed = 10.0f;
         public float SideSpeed = 10.0f;
         public float TiltAngle = 10.0f;
@@ -32,6 +33,7 @@ namespace GGJ2020
         public Camera Camera;
         public ForceField ForceField;
         public GameManager GameManager;
+        public Collider Collider;
 
         public void Start()
         {
@@ -170,9 +172,19 @@ namespace GGJ2020
                 currentSpeed = Speed;
         }
 
-        // public void ActivateParticleMode(bool fromCollision)
-        // {
-        //     ForceField.SetActive(true);
-        // }
+        public void Hit()
+        {
+            EnableForceField();
+            GameManager.LifeLost();
+        }
+        
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (!IgnoringCollisions)
+                return;
+
+            if (collision.gameObject.tag == "Obstacle")
+                Physics.IgnoreCollision(collision.collider, Collider);
+        }
     }
 }

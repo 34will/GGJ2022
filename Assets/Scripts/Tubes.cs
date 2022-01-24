@@ -13,7 +13,7 @@ namespace GGJ2020
         public GameManager GameManager;
         public Controller Player;
         public GameObject TubePrefab;
-        public List<GameObject> TubeObjects;
+        public List<Tube> TubeObjects;
         public float VisibleLength;
 
         public void Start()
@@ -26,12 +26,19 @@ namespace GGJ2020
             if (tubeLength <= 0)
                 throw new System.Exception("TubeLength cannot be 0");
 
-            TubeObjects = new List<GameObject>();
+            Debug.Log(GameManager.Boons.Count);
+            TubeObjects = new List<Tube>();
             float currentLength = 0.0f;
+            int boonOffset = 0;
             while (currentLength < VisibleLength)
             {
-                TubeObjects.Add(Instantiate(TubePrefab, new Vector3(0, 0, currentLength), Quaternion.identity, transform));
+                Tube instance = Instantiate(TubePrefab, new Vector3(0, 0, currentLength), Quaternion.identity, transform)
+                    .GetComponent<Tube>();
+                TubeObjects.Add(instance);
                 currentLength += tubeLength;
+
+                instance.Gate.SetBoon(GameManager.Boons[boonOffset]);
+                boonOffset++;
             }
             previousLastTubeIndex = TubeObjects.Count - 1;
 
@@ -40,11 +47,11 @@ namespace GGJ2020
 
         public void Update()
         {
-            GameObject lastTube = TubeObjects[lastTubeIndex];
+            Tube lastTube = TubeObjects[lastTubeIndex];
             if (Player.transform.position.z - cameraOffset < lastTube.transform.position.z + tubeLength)
                 return;
 
-            GameObject finalTube = TubeObjects[previousLastTubeIndex];
+            Tube finalTube = TubeObjects[previousLastTubeIndex];
             lastTube.transform.localPosition = new Vector3(0.0f, 0.0f, finalTube.transform.position.z + tubeLength);
 
             previousLastTubeIndex = lastTubeIndex;
@@ -53,6 +60,8 @@ namespace GGJ2020
                 lastTubeIndex = 0;
 
             GameManager.GatePassed();
+            Boon boon = GameManager.Boons.Count <= 0 ? Boon.None : GameManager.Boons[0];
+            lastTube.Gate.SetBoon(boon);
         }
     }
 }
