@@ -5,6 +5,7 @@ namespace GGJ2020
     public class Tube : MonoBehaviour
     {
         public Renderer Renderer;
+        public Gate Gate;
 
         public float GetLength()
         {

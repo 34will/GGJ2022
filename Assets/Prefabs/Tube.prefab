@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderer: {fileID: 106544563927561585}
+  Gate: {fileID: 7147126232917262170}
 --- !u!1 &106544562698742226
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,3 +888,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5059952787556773964, guid: 1bd131c2c823af4429390b1333d8924c, type: 3}
   m_PrefabInstance: {fileID: 3465759879457619845}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7147126232917262170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5996379413467857119, guid: 1bd131c2c823af4429390b1333d8924c, type: 3}
+  m_PrefabInstance: {fileID: 3465759879457619845}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f6c9c559c05ec4596511e1ef189bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

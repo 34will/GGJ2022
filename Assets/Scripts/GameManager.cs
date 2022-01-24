@@ -5,7 +5,6 @@ namespace GGJ2020
 {
     public class GameManager : MonoBehaviour
     {
-        private List<int> boons = null;
         private float startZ = 0.0f;
         private int gates = 0;
 
@@ -23,6 +22,20 @@ namespace GGJ2020
         public int ObstaclesHit = 0;
         public int Lives = 0;
         public int StartLives = 3;
+        public List<Boon> Boons = null;
+
+        private static void Shuffle<T>(List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Random.Range(0, n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
 
         public void Start()
         {
@@ -33,11 +46,12 @@ namespace GGJ2020
 
             int speedChanges = (int)(MaxSpeed / SpeedIncrease);
             int rotationChanges = (int)(MaxRotationSpeed / RotationSpeedIncrease);
-            boons = new List<int>(speedChanges + rotationChanges);
+            Boons = new List<Boon>(speedChanges + rotationChanges);
             for (int i = 0; i < speedChanges; i++)
-                boons.Add(0);
+                Boons.Add(Boon.Speed);
             for (int i = 0; i < rotationChanges; i++)
-                boons.Add(1);
+                Boons.Add(Boon.Spin);
+            Shuffle(Boons);
 
             Ui.UpdateLives(Lives, StartLives);
             Ui.UpdateObstaclesHit(ObstaclesHit);
@@ -62,30 +76,29 @@ namespace GGJ2020
 
         public void GatePassed()
         {
-            if (boons.Count <= 0)
-                return;
-
-            int boonIndex = Random.Range(0, boons.Count);
-            int boon = boons[boonIndex];
-            boons.RemoveAt(boonIndex);
-            switch (boon)
+            if (Boons.Count > 0)
             {
-                case 0:
-                    float newSpeed = Player.Speed + SpeedIncrease;
-                    if (newSpeed > MaxSpeed)
-                        newSpeed = MaxSpeed;
-                    Player.SetSpeed(newSpeed);
-                    Ui.UpdateSpeed(Player.Speed);
+                Boon boon = Boons[0];
+                Boons.RemoveAt(0);
+                switch (boon)
+                {
+                    case Boon.Speed:
+                        float newSpeed = Player.Speed + SpeedIncrease;
+                        if (newSpeed > MaxSpeed)
+                            newSpeed = MaxSpeed;
+                        Player.SetSpeed(newSpeed);
+                        Ui.UpdateSpeed(Player.Speed);
 
-                    break;
-                case 1:
-                    float newRotateSpeed = ObstaclesRotater.RotateSpeed + RotationSpeedIncrease;
-                    if (newRotateSpeed > MaxRotationSpeed)
-                        newRotateSpeed = MaxRotationSpeed;
-                    TubesRotater.RotateSpeed = -newRotateSpeed;
-                    ObstaclesRotater.RotateSpeed = newRotateSpeed;
-                    Ui.UpdateRotation(ObstaclesRotater.RotateSpeed);
-                    break;
+                        break;
+                    case Boon.Spin:
+                        float newRotateSpeed = ObstaclesRotater.RotateSpeed + RotationSpeedIncrease;
+                        if (newRotateSpeed > MaxRotationSpeed)
+                            newRotateSpeed = MaxRotationSpeed;
+                        TubesRotater.RotateSpeed = -newRotateSpeed;
+                        ObstaclesRotater.RotateSpeed = newRotateSpeed;
+                        Ui.UpdateRotation(ObstaclesRotater.RotateSpeed);
+                        break;
+                }
             }
 
             gates++;

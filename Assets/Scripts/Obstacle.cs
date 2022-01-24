@@ -22,7 +22,9 @@ namespace GGJ2020
                 return;
 
             Collide();
-            GameManager.LifeLost();
+            collision.gameObject
+                .GetComponent<Controller>()
+                .Hit();
         }
 
         public void Collide()
